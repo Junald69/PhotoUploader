@@ -43,7 +43,7 @@ exports.handler = async (event, context) => {
 
         const fileMetadata = {
             name: fileName,
-            parents: ['YOUR_FOLDER_ID'], // Google DriveフォルダIDをここに設定
+            parents: ['15FiZVLx6y5sRftCe8a4pM9go8EP-a_wT'], // Google DriveフォルダIDをここに設定
         };
 
         const media = {
