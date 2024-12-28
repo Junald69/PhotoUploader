@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive アップロード</title>
+</head>
+<body>
+    <h1>Google Drive アップロード</h1>
+    <input type="file" id="file-input" multiple>
+    <button onclick="uploadFiles()">アップロード</button>
+    <div id="messages"></div>
+    <script>
+        async function uploadFiles() {
+            const fileInput = document.getElementById('file-input');
+            const files = fileInput.files;
+
+            if (files.length === 0) {
+                alert('ファイルを選択してください！');
+                return;
+            }
+
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = ''; // 結果をクリア
+
+            for (const file of files) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/.netlify/functions/upload', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        messagesDiv.innerHTML += `<p>アップロード成功: ${result.name}</p>`;
+                    } else {
+                        const error = await response.text();
+                        messagesDiv.innerHTML += `<p style="color:red;">アップロード失敗: ${error}</p>`;
+                    }
+                } catch (error) {
+                    messagesDiv.innerHTML += `<p style="color:red;">エラー: ${error.message}</p>`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
